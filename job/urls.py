@@ -7,6 +7,7 @@ urlpatterns = [
     path('addNewjob', views.add_jop.as_view(),),
     path('companyposts', views.companyPosts,),
     path('companyposts/apply', views.ApplyForJob.as_view(),),
+    path('companyposts/applications/<int:id>', views.Applications,),
     path('companyposts/edit/<int:id>', views.EditcompanyPosts.as_view(),),
 
 ]
