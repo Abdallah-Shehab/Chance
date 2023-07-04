@@ -1,0 +1,41 @@
+[
+    {   
+        "id":"0",
+        "name": "Faculty of Computer & Information",
+        "deprts": ["Computer Science", "Information Science" , "Information Technology"]   
+    },
+    {
+
+         "id":"1",
+        "name": "Faculty of Computers & Data Science",
+        "deprts":["Computer Science", " Artificial Intelligence and Machine learning"]
+    },
+    {
+         "id":"2",
+        "name" : "Faculty of Computers & Artificial Intelligence",
+        "deprts":["Computer Science" , "Artificial Intelligence & Machine Learning" , "Data Science"]
+    }
+    ,{
+         "id":"3",
+        "name": "Faculty of Artificial Intelligence",
+        "deprts" : ["Robotics & Intelligent Machines" , "Machine Learning & Information Retrieval" , " Embedded Network Systems" ,"Data Science"]
+    },
+    {
+         "id":"4",
+        "name": "Faculty of Engineering",
+        "deprts" : ["Computer Science" , "Information Systems" , "Computer Engineering" , "Information Technology" , "Software Engineering" , "Network Engineering"]
+    },
+    {
+         "id":"5",
+        "name": "Faculty of Electronic Engineering",
+        "deprts" : ["Electronics and electrical communications engineering" , "Industrial electronics and control engineering" , "Engineering and Computer Science"]
+    },
+    {
+         "id":"6",
+        "name": "Faculty of Science",
+        "deprts" : ["Computer Science" , "Information Systems" , "Computer systems" , "Scientific calculations" , "Bioinformatics Technology"
+                                ,"Software Engineering" , "artificial intelligence" , "Cyper security" , "Multimedia" , "Robot computing"
+                                
+    ]
+    }
+] 
