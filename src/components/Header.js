@@ -174,6 +174,17 @@ const Header = () => {
               >
                 Jops
               </Button>
+              {user && user.superuser ? null : (
+                <>
+                  <Button
+                    href="/myApplications"
+                    sx={{ my: 2, color: "white", display: "block" }}
+                  >
+                    My Applications
+                  </Button>
+                </>
+              )}
+
               {/* {pages.map((page) => (
              
               ))} */}

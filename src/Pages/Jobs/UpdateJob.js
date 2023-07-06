@@ -10,21 +10,37 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import TextField from "@mui/material/TextField";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
-const UpdateJob = () => {
+const UpdateJob = (props) => {
+  const location = useLocation();
   let { authTokens, logOut, profileData } = useContext(AuthContext);
   const [salary, setSalary] = React.useState("");
   const [title, setTitle] = React.useState("");
   const params = useParams();
   console.log(params);
+
+  const preValues = location.state;
+  const result = Object.values(preValues);
+  const [input, setInput] = useState({
+    salary: result[0].Salary,
+    title: result[0].title,
+  });
+  const inputHandler = (e) => {
+    const inputName = e.target.name;
+    const value = e.target.value;
+    setInput({ ...input, [inputName]: value });
+  };
+
+  // console.log(result);
+  console.log(result[0].Salary);
   let updateJob = async (e) => {
     e.preventDefault();
 
     let response = await fetch(
-      `http://127.0.0.1:8000/jobs/companyposts/update/${params.jobid}`,
+      `http://127.0.0.1:8000/jobs/companyposts/edit/${params.jobid}`,
       {
         method: "POST",
         headers: {
@@ -34,8 +50,8 @@ const UpdateJob = () => {
         body: JSON.stringify({
           //   salary: salary,
 
-          title: title,
-          salary: salary,
+          title: input.title,
+          salary: input.salary,
         }),
       }
     );
@@ -68,22 +84,30 @@ const UpdateJob = () => {
               >
                 <TextField
                   id="outlined-basic"
-                  label="salary"
+                  // label="salary"
                   name="salary"
                   type="number"
                   variant="outlined"
-                  onChange={(e) => {
-                    setSalary(e.target.value);
-                  }}
+                  onChange={inputHandler}
+                  value={input.salary}
                 />
-                <input
+                <TextField
+                  id="outlined-basic"
+                  // label="salary"
+                  name="title"
+                  type="text"
+                  variant="outlined"
+                  onChange={inputHandler}
+                  value={input.title}
+                />
+                {/* <input
                   type="text"
                   name="title"
                   id="outlined-basic"
                   onChange={(e) => {
                     setTitle(e.target.value);
                   }}
-                />
+                /> */}
                 {/* <TextField
                   id="outlined-basic"
                   label="title"

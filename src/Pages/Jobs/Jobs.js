@@ -183,9 +183,15 @@ export const Jobs = () => {
                           >
                             <i className="fa fa-heart"> </i> Apply Now
                           </MDBBtn> */}
-                          <Button onClick={(e) => ApplyForJob(`${d.id}`, e)}>
-                            Apply
-                          </Button>
+                          {user && user.superuser ? null : (
+                            <>
+                              <Button
+                                onClick={(e) => ApplyForJob(`${d.id}`, e)}
+                              >
+                                Apply
+                              </Button>
+                            </>
+                          )}
                         </MDBCardBody>
                       </MDBCol>
                       <MDBCol

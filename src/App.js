@@ -15,6 +15,7 @@ import AddJob from "./Pages/Jobs/Add_Jop";
 import DashBoard from "./Pages/AdminPanel/DashBoard";
 import MangaPosts from "./Pages/AdminPanel/MangaPosts";
 import UpdateJob from "./Pages/Jobs/UpdateJob";
+import UserApplications from "./Pages/UserApplications";
 // import PrivateRoute from "./utils/PrivateRoute";
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/dashboard" element={<DashBoard />} />
+            <Route path="/myApplications" element={<UserApplications />} />
             <Route path="/dashboard/manageposts" element={<MangaPosts />} />
             <Route
               path="/dashboard/manageposts/update/:jobid"
