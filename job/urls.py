@@ -8,6 +8,7 @@ urlpatterns = [
     path('companyposts', views.companyPosts,),
     path('companyposts/apply', views.ApplyForJob.as_view(),),
     path('companyposts/applications/<int:id>', views.Applications,),
+    path('companyposts/userapplications', views.userApplications,),
     path('companyposts/edit/<int:id>', views.EditcompanyPosts.as_view(),),
 
 ]

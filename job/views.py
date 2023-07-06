@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status, filters
 from rest_framework.response import Response
 from django.http import Http404
-from .serializers import JopSerializer , ApplicationsSerializer
+from .serializers import JopSerializer, ApplicationsSerializer
 import json
 from django.shortcuts import render
 from django.http import JsonResponse
@@ -168,18 +168,31 @@ class ApplyForJob(APIView):
             # Apply.jop_id = jobid
             return Response(status=status.HTTP_200_OK)
 
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def Applications(request,id):
-    jobid=id
+def Applications(request, id):
+    jobid = id
     user = request.user
     apps = Apply.objects.all().filter(jop=jobid)
-        # jops = Jop.objects.get(owner=userid)
+    # jops = Jop.objects.get(owner=userid)
 
     if request.method == 'GET':
         serializer = ApplicationsSerializer(apps, many=True)
         return Response(serializer.data)
-    
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def userApplications(request):
+    # jobid=id
+    user = request.user
+    apps = Apply.objects.all().filter(name=user)
+    # jops = Jop.objects.get(owner=userid)
+
+    if request.method == 'GET':
+        serializer = ApplicationsSerializer(apps, many=True)
+        return Response(serializer.data)
 
 
 class EditcompanyPosts(APIView):
