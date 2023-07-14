@@ -1,8 +1,8 @@
 import { createContext, useState, useEffect } from "react";
 import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import Alert from "@mui/material/Alert";
 
+import Alert from "@mui/material/Alert";
 const AuthContext = createContext();
 
 export default AuthContext;
@@ -42,12 +42,36 @@ export const AuthProvider = ({ children }) => {
       setAuthTokens(data);
       setUser(jwt_decode(data.access));
       localStorage.setItem("authTokens", JSON.stringify(data));
+      <Alert severity="success">Sign in successfully</Alert>;
       navigate("/");
     } else {
-      alert("Something went wrong!");
+      <Alert severity="warning">Something went wrong!</Alert>;
+
+      // alert("Something went wrong!");
     }
   };
-
+  let SendComment = async (e) => {
+    e.preventDefault();
+    let response = await fetch("http://127.0.0.1:8000/jobs/sendcomment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + String(authTokens.access),
+      },
+      body: JSON.stringify({
+        comment: e.target.comment.value,
+      }),
+    });
+    // let data = await response.json();
+    // console.log(data);
+    if (response.status === 200) {
+      alert("done");
+      window.location.reload(false);
+    }
+    //  else if (response.statusText === "Unauthorized") {
+    //   logOut();
+    // }
+  };
   let registerUser = async (e) => {
     e.preventDefault();
     let response = await fetch("http://127.0.0.1:8000/api/signup/", {
@@ -56,12 +80,13 @@ export const AuthProvider = ({ children }) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        firstname: e.target.firstname.value,
-        lastname: e.target.lastname.value,
+        // firstname: e.target.firstname.value,
+        // lastname: e.target.lastname.value,
         username: e.target.username.value,
         email: e.target.email.value,
         password: e.target.password.value,
         password2: e.target.password2.value,
+        company: e.target.company.value,
       }),
     });
     let data = await response.json();
@@ -96,6 +121,7 @@ export const AuthProvider = ({ children }) => {
         Jop_Type: e.target.Jop_Type.value,
         place: e.target.city.value,
         Salary: e.target.salary.value,
+        // image: user.image,
       }),
     });
     // let data = await response.json();
@@ -145,6 +171,22 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
     }
   };
+  let getProfile = async () => {
+    let response = await fetch("http://127.0.0.1:8000/api/profile/", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + String(authTokens.access),
+      },
+    });
+    let data = await response.json();
+    console.log(data);
+    if (response.status === 200) {
+      setProfileData(data);
+    } else if (response.statusText === "Unauthorized") {
+      logOut();
+    }
+  };
 
   let contextData = {
     user: user,
@@ -154,14 +196,19 @@ export const AuthProvider = ({ children }) => {
     logOut: logOut,
     New_job: New_job,
     registerUser: registerUser,
+    SendComment: SendComment,
     // Profile: Profile,
-    profileData: profileData,
+    // getProfile: getProfile,
+    // profileData: profileData,
   };
 
   useEffect(() => {
     if (loading) {
       // updateToken();
     }
+    // if (authTokens) {
+    //   getProfile();
+    // }
 
     let fourMinutes = 1000 * 60 * 4;
     console.log("Token updated");

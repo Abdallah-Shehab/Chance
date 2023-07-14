@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -18,15 +18,16 @@ import Grow from "@mui/material/Grow";
 import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
 import WorkIcon from "@mui/icons-material/Work";
-
+import PsychologyAltIcon from "@mui/icons-material/PsychologyAlt";
 import MenuList from "@mui/material/MenuList";
 import Stack from "@mui/material/Stack";
+import LinkIcon from "@mui/icons-material/Link";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 import "../assets/css/main.css";
 const Header = () => {
-  const pages = ["Home", "Jops"];
+  const pages = ["Home", "Explore"];
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 
@@ -81,8 +82,9 @@ const Header = () => {
       },
     },
   });
+  let [img, setImg] = useState("");
 
-  let { user, logOut } = useContext(AuthContext);
+  let { user, logOut, profileData, authTokens } = useContext(AuthContext);
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -90,6 +92,13 @@ const Header = () => {
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <WorkIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+            {/* <LinkIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
+            {/* <img src="../assets/img/link.png" alt="logo" /> */}
+            {/* <img
+              alt="none"
+              src={`http://127.0.0.1:8000/media/header/link.png`}
+              style={{ border: "none", outline: "none", width: "3%" }}
+            /> */}
 
             <Typography
               variant="h5"
@@ -106,7 +115,7 @@ const Header = () => {
                 textDecoration: "none !important",
               }}
             >
-              Chance
+              Forsa
             </Typography>
 
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -172,24 +181,58 @@ const Header = () => {
                 href="/jobs"
                 sx={{ my: 2, color: "white", display: "block" }}
               >
-                Jops
+                Explore
               </Button>
-              {user && user.superuser ? null : (
+              {user && !user.staff ? (
                 <>
                   <Button
                     href="/myApplications"
                     sx={{ my: 2, color: "white", display: "block" }}
                   >
-                    My Applications
+                    Applications
+                  </Button>
+                  <Button
+                    href="/roadmap"
+                    sx={{ my: 2, color: "white", display: "block" }}
+                  >
+                    Road Map
                   </Button>
                 </>
-              )}
+              ) : null}
+              {/* {authTokens && user.superuser ? null : (
+                <>
+                  <Button
+                    href="/myApplications"
+                    sx={{ my: 2, color: "white", display: "block" }}
+                  >
+                    Applications
+                  </Button>
+                </>
+              )} */}
+              <Button
+                href="/users"
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
+                Profiles
+              </Button>
+              <Button
+                href="/About"
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
+                About
+              </Button>
+              <Button
+                href="/contact"
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
+                Contact Us
+              </Button>
 
               {/* {pages.map((page) => (
              
               ))} */}
             </Box>
-            {user && user.superuser ? (
+            {/* {user && user.superuser ? (
               <Button
                 variant="contained"
                 href="/Jobs/addjob"
@@ -201,7 +244,7 @@ const Header = () => {
                 ></i>
                 ADD JOb
               </Button>
-            ) : null}
+            ) : null} */}
 
             {user ? (
               <div>
@@ -214,9 +257,12 @@ const Header = () => {
                     aria-haspopup="true"
                     onClick={handleToggle}
                   >
-                    <Avatar alt="none" src="" />
+                    {/* <Avatar
+                      alt="none"
+                      src={`http://127.0.0.1:8000/media/profile/download.png`}
+                    /> */}
+                    <Button color="error">{user.username}</Button>
                   </Button>
-                  <Button color="error">{user.username}</Button>
                 </Stack>
 
                 <Popper
@@ -247,7 +293,7 @@ const Header = () => {
                             onKeyDown={handleListKeyDown}
                           >
                             <a
-                              href="/profile/"
+                              href={`/profile/${user.username}`}
                               style={{
                                 textDecoration: "none",
                                 color: "black",
@@ -255,15 +301,17 @@ const Header = () => {
                             >
                               <MenuItem>Profile</MenuItem>
                             </a>
-                            <a
-                              href="/dashboard/manageposts"
-                              style={{
-                                textDecoration: "none",
-                                color: "black",
-                              }}
-                            >
-                              <MenuItem>Dashboard</MenuItem>
-                            </a>
+                            {user && user.staff ? (
+                              <a
+                                href="/dashboard/manageposts"
+                                style={{
+                                  textDecoration: "none",
+                                  color: "black",
+                                }}
+                              >
+                                <MenuItem>Dashboard</MenuItem>
+                              </a>
+                            ) : null}
 
                             <MenuItem onClick={logOut}>Logout</MenuItem>
                           </MenuList>
@@ -274,10 +322,21 @@ const Header = () => {
                 </Popper>
               </div>
             ) : (
-              // <p onClick={logOut}>Logout</p>
-              <Button href="/login" color="secondary">
-                LogIn
-              </Button>
+              <>
+                {/* <p onClick={logOut}>Logout</p> */}
+                <Button
+                  style={{ marginRight: "10px" }}
+                  href="/signup"
+                  variant="outlined"
+                  color="success"
+                >
+                  SignUp
+                </Button>
+
+                <Button href="/login" variant="outlined" color="secondary">
+                  LogIn
+                </Button>
+              </>
               // <Link to="/login">Login</Link>
             )}
           </Toolbar>

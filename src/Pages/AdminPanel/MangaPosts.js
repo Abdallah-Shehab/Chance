@@ -1,38 +1,38 @@
 // import React from "react";
 import React, { useState, useEffect, useContext } from "react";
-import Dash from "./DashBoard";
+
 import Button from "@mui/material/Button";
 
 import AuthContext from "../../context/AuthContext";
 
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
+import TextOverflow from "react-text-overflow";
+
 import Grid from "@mui/material/Grid";
 import CssBaseline from "@mui/material/CssBaseline";
-import Chip from "@mui/material/Chip";
+import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { DataGrid } from "@mui/x-data-grid";
+
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import DoneIcon from "@mui/icons-material/Done";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import Slide from "@mui/material/Slide";
+
 import Applications from "./Applications";
-import UpdateJob from "../Jobs/UpdateJob";
+
 import { Link } from "react-router-dom";
+import Dash from "../AdminPanel/DashBoard";
+
 const MangaPosts = () => {
+  var moment = require("moment");
+
   let { authTokens } = useContext(AuthContext);
   let [jobs, setJobs] = useState([]);
   let [deleteID, setDeleteId] = useState([]);
@@ -63,27 +63,6 @@ const MangaPosts = () => {
     }
   };
 
-  // const getApps = async (e) => {
-  //   let response = await fetch(
-  //     `http://127.0.0.1:8000/jobs/companyposts/applications/${e.currentTarget.id}`,
-  //     {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: "Bearer " + String(authTokens.access),
-  //       },
-  //     }
-  //   );
-  //   let data = await response.json();
-
-  //   // console.log(data);
-  //   if (response.status === 200) {
-  //     console.log(data);
-  //     setApplications(data);
-  //     // setJobs(data);
-  //   }
-  // };
-
   let deletePost = async (e) => {
     e.preventDefault();
     // setDeleteId();
@@ -112,14 +91,14 @@ const MangaPosts = () => {
 
   return (
     <>
+      <br />
       <CssBaseline />
       <Box sx={{ flexGrow: 1 }}>
-        {/* <Dash /> */}
-
-        <Grid container spacing={2} style={{ zIndex: "-100" }}>
+        <Grid container spacing={2} direction="row" style={{ zIndex: "-100" }}>
           <Grid
             item
-            xs={8}
+            xs={10}
+            justifyContent="flex-start"
             style={{
               display: "flex",
               flexDirection: "column",
@@ -127,14 +106,27 @@ const MangaPosts = () => {
               justifyContent: "center",
             }}
           >
-            <h1>Manage Posts </h1>
             <TableContainer>
+              <div
+                style={{
+                  minWidth: 600,
+                  backgroundColor: "#fff",
+
+                  width: "30%",
+                  padding: "10px",
+                  borderRadius: "10px",
+                  marginLeft: "20px",
+                  boxShadow: "inset 0px 0px 22px -12px rgba(66, 68, 90, 1)",
+                }}
+              >
+                <h1>Manage Jobs </h1>
+              </div>
               <Table
                 sx={{
                   minWidth: 600,
                   marginTop: "20px",
                   marginLeft: "20px",
-                  width: "90%",
+                  width: "98%",
                   boxShadow: " 0px 10px 15px -3px rgba(0,0,0,0.1)",
                 }}
                 stickyHeader
@@ -145,7 +137,18 @@ const MangaPosts = () => {
                     <TableCell>ID</TableCell>
                     <TableCell align="left">Title</TableCell>
                     <TableCell align="left">Salary&nbsp;(EGP)</TableCell>
-                    <TableCell align="left">Description</TableCell>
+                    <TableCell
+                      align="left"
+                      style={{
+                        // width: "20%",
+                        maxWidth: "50px",
+                        whiteSpace: "wrap",
+                        overflow: "hidden !important",
+                        textOverflow: "clip !important",
+                      }}
+                    >
+                      Description
+                    </TableCell>
                     <TableCell align="left">Published_at</TableCell>
                     <TableCell align="left">Modify</TableCell>
                     <TableCell align="left"></TableCell>
@@ -164,14 +167,18 @@ const MangaPosts = () => {
                             "&:last-child td, &:last-child th": { border: 0 },
                           }}
                         >
-                          <TableCell align="left">{j.id}</TableCell>
+                          <TableCell align="left"> 1</TableCell>
                           <TableCell component="th" scope="row">
                             {j.title}
                           </TableCell>
                           <TableCell align="left">{j.Salary}</TableCell>
 
-                          <TableCell align="left">{j.Description}</TableCell>
-                          <TableCell align="left">{j.Published_at}</TableCell>
+                          <TableCell align="left">
+                            <TextOverflow text={j.Description} />
+                          </TableCell>
+                          <TableCell align="left">
+                            {moment(j.Published_at).format("DD-MMM-YYYY")}{" "}
+                          </TableCell>
                           <TableCell align="left">
                             <Tooltip title="Edit">
                               <Link
@@ -222,8 +229,9 @@ const MangaPosts = () => {
             </TableContainer>
             <br />
           </Grid>
-          {/* <Grid item xs={4}>
-          </Grid> */}
+          <Grid item xs={2}>
+            <Dash />
+          </Grid>
         </Grid>
 
         {/* <Button onClick={getjobs}>get data</Button> */}

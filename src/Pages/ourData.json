@@ -1,0 +1,45 @@
+[
+    {   "id":"1",
+        "name":"Eng. Abdallah SHafiQ",
+        "title":"Full Stack Developer",
+        "des":"software engineer is a computer science professional who designs, develops, tests evaluates s",
+        "email":"abdallah@gmail.com",
+        "image":"abdallah",
+        "github":"github",
+        "linked":""
+
+    }, 
+    {   "id":"2",
+        "name":"Eng. Alaa Abozekry",
+        "title":"Frontend Developer",
+        "des":"software engineer is a computer science professional who designs, develops, tests evaluates ",
+        "email":"alaa@gmail.com",
+        "image":"alaa","github":"github",
+        "linked":""
+    }, 
+    {   "id":"3",
+        "name":"Eng. Abdelmaksoud Eid",
+        "title":"Backend Developer",
+        "des":"software engineer is a computer science professional who designs, develops, tests evaluates ",
+        "email":"abdelmaksoudgomma@gmail.com",
+        "image":"abdelmaksoud","github":"https://github.com/Abdelmaksoude",
+        "linked":"https://www.linkedin.com/in/abdelmaqsoud-gomma-42243b224/"
+
+    } ,{   "id":"4",
+        "name":"Eng. Rawan Elsayed",
+        "title":"Frontend Developer",
+        "des":"software engineer is a computer science professional who designs, develops, tests evaluates ",
+        "email":"abdelmaksoudgomma@gmail.com",
+        "image":"none","github":"https://github.com/Abdelmaksoude",
+        "linked":"https://www.linkedin.com/in/abdelmaqsoud-gomma-42243b224/"
+
+    },{   "id":"5",
+        "name":"Eng. Hager Elrefey",
+        "title":"Frontend Developer",
+        "des":"software engineer is a computer science professional who designs, develops, tests evaluates ",
+        "email":"abdelmaksoudgomma@gmail.com",
+        "image":"none","github":"https://github.com/Abdelmaksoude",
+        "linked":"https://www.linkedin.com/in/abdelmaqsoud-gomma-42243b224/"
+
+    }
+]

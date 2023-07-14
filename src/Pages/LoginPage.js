@@ -49,7 +49,7 @@ const LoginPage = () => {
               required
               fullWidth
               id="email"
-              label="Username"
+              label="Email"
               name="username"
               autoComplete="email"
               autoFocus
@@ -64,10 +64,7 @@ const LoginPage = () => {
               id="password"
               autoComplete="current-password"
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
+
             <Button
               type="submit"
               fullWidth

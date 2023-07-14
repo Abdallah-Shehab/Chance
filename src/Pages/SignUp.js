@@ -15,6 +15,10 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
@@ -61,27 +65,6 @@ const SignUp = () => {
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstname"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastname"
-                  autoComplete="family-name"
-                />
-              </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
@@ -123,6 +106,23 @@ const SignUp = () => {
                   id="password2"
                   autoComplete="new-password"
                 />
+              </Grid>
+              <Grid item xs={12}>
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">
+                    Account Type
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    label="Account Type"
+                    name="company"
+                  >
+                    <MenuItem value={0}>Normal User</MenuItem>
+                    <MenuItem value={1}>Company</MenuItem>
+                    {/* <MenuItem value={30}>Thirty</MenuItem> */}
+                  </Select>
+                </FormControl>
               </Grid>
             </Grid>
             <Button

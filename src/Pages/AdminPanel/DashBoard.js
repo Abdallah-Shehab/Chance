@@ -1,70 +1,101 @@
-import React from "react";
-import "@trendmicro/react-sidenav/dist/react-sidenav.css";
-
-import SideNav, {
-  Toggle,
-  Nav,
-  NavItem,
-  NavIcon,
-  NavText,
-} from "@trendmicro/react-sidenav";
+/* eslint-disable react/display-name, jsx-a11y/click-events-have-key-events */
+import { Navigation } from "react-minimal-side-navigation";
+import { useNavigate, useLocation } from "react-router-dom";
+import Icon from "awesome-react-icons";
+import React, { useState } from "react";
+import ManageSearchIcon from "@mui/icons-material/ManageSearch";
+import "react-minimal-side-navigation/lib/ReactMinimalSideNavigation.css";
 
 const Dash = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
   return (
     <>
+      {/* Sidebar */}
       <div
         style={{
-          position: "fixed",
-          top: "7%",
-          right: "10%",
-          padding: "30px",
-          height: "100%",
-          zIndex: "-1000",
+          // backgroundColor: "#ddd",
+          // color: "#000",
+
+          padding: "10px",
+
+          zIndex: "-100",
         }}
       >
-        <SideNav
-          expanded="True"
-          style={{ backgroundColor: "#3b3b3b", paddingTop: "30px" }}
-        >
-          {/* <SideNav.Toggle
-          onClick={() => {
-            this.setState({ isVisible: !this.state.isVisible });
+        {/* https://github.com/abhijithvijayan/react-minimal-side-navigation */}
+        <Navigation
+          activeItemId={location.pathname}
+          onSelect={({ itemId }) => {
+            navigate(itemId);
           }}
-        /> */}
-          <SideNav.Nav defaultSelected="home">
-            <NavItem eventKey="home">
-              <NavIcon>
-                <i
-                  className="fa fa-fw fa-home"
-                  style={{ fontSize: "1.75em" }}
-                />
-              </NavIcon>
+          items={[
+            {
+              title: "Manage",
 
-              <NavText>
-                <a
-                  href="/dashboard/manageposts"
-                  style={{ color: "white", textDecoration: "none" }}
-                >
-                  Manage Posts
-                </a>
-              </NavText>
-            </NavItem>
+              // Optional
+              itemId: "/dashboard/manageposts",
 
-            <NavItem eventKey="placed orders">
-              <NavIcon>
-                <i
-                  className="fa fa-fw fa-line-chart"
-                  style={{ fontSize: "1.75em" }}
-                />
-              </NavIcon>
-              <NavText>placed orders</NavText>
-            </NavItem>
-          </SideNav.Nav>
-        </SideNav>
+              elemBefore: () => <ManageSearchIcon />,
+            },
+            {
+              title: "Add new Job",
+              itemId: "/Jobs/addjob",
+              // Optional
+
+              elemBefore: () => <ManageSearchIcon />,
+            },
+            // {
+            //   title: "About",
+
+            //   elemBefore: () => <Icon name="user" />,
+            //   subNav: [
+            //     {
+            //       title: "Projects",
+            //       itemId: "/about/projects",
+            //       // Optional
+            //       elemBefore: () => <Icon name="cloud-snow" />,
+            //     },
+            //     {
+            //       title: "Members",
+            //       itemId: "/about/members",
+            //       elemBefore: () => <Icon name="coffee" />,
+            //     },
+            //   ],
+            // },
+            // {
+            //   title: "Another Tab",
+            //   itemId: "/another",
+            //   subNav: [
+            //     {
+            //       title: "Teams",
+            //       itemId: "/another/teams",
+            //       // Optional
+            //       // elemBefore: () => <Icon name="calendar" />
+            //     },
+            //   ],
+            // },
+          ]}
+        />
+
+        <div className="absolute bottom-0 w-full my-8">
+          {/* <Navigation
+            activeItemId={location.pathname}
+            items={[
+              {
+                title: "Settings",
+                itemId: "/settings",
+                elemBefore: () => <Icon name="activity" />,
+              },
+            ]}
+            // onSelect={({ itemId }) => {
+            //   history.push(itemId);
+            // }}
+          /> */}
+        </div>
       </div>
     </>
   );
 };
-
-// const DashBoard = withRouter(Dash);
 export default Dash;
