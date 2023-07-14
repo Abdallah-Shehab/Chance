@@ -1,10 +1,11 @@
-from .models import Jop, Apply
+from .models import Jop, Apply, User, Comments
+from base.models import Profile
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status, filters
 from rest_framework.response import Response
-from django.http import Http404
-from .serializers import JopSerializer, ApplicationsSerializer
+from django.http import Http404, HttpResponse
+from .serializers import JopSerializer, ApplicationsSerializer, CommentSerializer
 import json
 from django.shortcuts import render
 from django.http import JsonResponse
@@ -25,13 +26,6 @@ def getJobs(request):
     return Response(serializer.data)
 
 
-# @api_view(['GET'])
-# @permission_classes([AllowAny])
-# def jop_detail_api(request , id):
-#     jop_detail = Jop.objects.all().filter(id=id)
-#     # serializer = JopSerializer(jop_detail)
-#     return JsonResponse(jop_detail,safe=False)
-
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([AllowAny])
 def jop_detail_api(request, id):
@@ -45,33 +39,6 @@ def jop_detail_api(request, id):
         return Response(serializer.data)
 
 
-# @permission_classes([IsAuthenticated])
-# def add_jop(request):
-#     if request.method == 'POST':
-#         form = JopForm(request.POST , request.FILES)
-#         if form.is_valid():
-#             myform = form.save(commit=False)
-#             myform.owner = request.user
-#             myform.save()
-#             return redirect(reverse('jops:jop_list'))
-#     else:
-#         form = JopForm()
-#     return render(request , 'jop/add_jop.html' , {'form':form})
-
-    # def post(self, request):
-    #     serializer = GuestSerializer(data=request.data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(
-    #             serializer.data,
-    #             status=status.HTTP_201_CREATED
-    #         )
-    #     return Response(
-    #         serializer.data,
-    #         status=status.HTTP_400_BAD_REQUEST
-    #     )
-
-
 class add_jop(APIView):
     permission_classes = (permissions.AllowAny, )
 
@@ -83,31 +50,20 @@ class add_jop(APIView):
         Experiance = data['Experiance']
         Salary = data['Salary']
         city = data['place']
+        # image = data['image']
 
         user = request.user
-
+        profile = Profile.objects.get(user=user)
         # return JsonResponse(user, safe=False)
-        jop = Jop(title=title, Description=Description, Salary=Salary,
-                  place=city, Experiance=Experiance, Jop_Type=Jop_Type)
-        jop.owner = user
+        job = Jop.objects.create(title=title, Description=Description, Salary=Salary,
+                                 place=city, Experiance=Experiance, Jop_Type=Jop_Type, owner=user, username=user.username, image=profile.image)
 
-        jop.save()
+        job.save()
 
         return Response(
             status=status.HTTP_201_CREATED
 
         )
-        # serializer = JopSerializer(data=request.data)
-        # if jop.is_valid():
-        #     jop.save()
-        #     return Response(
-        #         jop,
-        #         status=status.HTTP_201_CREATED
-        #     )
-        # return Response(
-        #            jop,
-        #     status=status.HTTP_400_BAD_REQUEST
-        # )
 
 
 @api_view(['GET'])
@@ -126,24 +82,6 @@ def companyPosts(request):
         return Response(serializer.data)
 
 
-# @api_view(['PUT', 'DELETE'])
-# @permission_classes([AllowAny])
-
-# def EditcompanyPosts(request,id):
-#     #   user=request.user
-#     #   job=  Jop.objects.get(id=id)
-
-#       if request.method == 'PUT':
-#          data = request.data
-#          salary = data['salary']
-#          title = data['title']
-#         #  gender = data['gender']
-#         #  bio = data['bio']
-#         #  nationality = data['nationality']
-#          Jop.objects.all().filter(id=id).update(salary=salary, title=title)
-
-#         #  profile.save()
-#          return Response({'success': 'Profile  Updated successfully'})
 class ApplyForJob(APIView):
     permission_classes = (permissions.IsAuthenticated, )
 
@@ -164,22 +102,73 @@ class ApplyForJob(APIView):
             return Response(status=status.HTTP_226_IM_USED)
 
         else:
-            Apply.objects.create(jop=job, name=user)
+            print(job.title, user.username, job.username)
+            Apply.objects.create(jop=job, name=user, job_title=job.title,
+                                 made_by=user.username, job_owner=job.username)
             # Apply.jop_id = jobid
             return Response(status=status.HTTP_200_OK)
+
+
+class SaveChanges(APIView):
+    permission_classes = (permissions.IsAuthenticated, )
+
+    def put(self, request):
+        data = request.data
+        print(data)
+        made_by = data["made_by"]
+        appstatus = data["status"]
+        if (appstatus != ''):
+
+            Apply.objects.filter(made_by=made_by).update(status=appstatus)
+            return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)
+
+
+class makeComment(APIView):
+    permission_classes = (permissions.IsAuthenticated, )
+
+    def post(self, request):
+        data = self.request.data
+        comment = data["comment"]
+        user = request.user
+        # serializer = CommentSerializer()
+        try:
+
+            Comments.objects.create(
+                user=user, comment=comment, username=user.username)
+            return Response(status=status.HTTP_200_OK)
+
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def getComments(request):
+    comm = Comments.objects.all()
+    serlizer = CommentSerializer(comm, many=True)
+    return Response(serlizer.data, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def Applications(request, id):
     jobid = id
-    user = request.user
+
     apps = Apply.objects.all().filter(jop=jobid)
-    # jops = Jop.objects.get(owner=userid)
 
     if request.method == 'GET':
         serializer = ApplicationsSerializer(apps, many=True)
-        return Response(serializer.data)
+
+        # serializer = ApplicationsSerializer(apps, many=True)
+        # print(job[0]["title"])
+        # return JsonResponse(list(data.values()), safe=False)
+        # return Response({"job": job[0]["title"],
+        #                  "users": users[0]["username"], "app": apps[0]["creted_at"]},
+        #                 status=status.HTTP_200_OK)
+        return Response(serializer.data,
+                        status=status.HTTP_200_OK)
+        # return Response(serializer.data)
 
 
 @api_view(['GET'])
@@ -193,6 +182,16 @@ def userApplications(request):
     if request.method == 'GET':
         serializer = ApplicationsSerializer(apps, many=True)
         return Response(serializer.data)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def DeleteApplication(request, id):
+    ApplicationId = id
+    user = request.user
+    apps = Apply.objects.all().filter(id=ApplicationId).delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
+    # jops = Jop.objects.get(owner=userid)
 
 
 class EditcompanyPosts(APIView):

@@ -14,7 +14,7 @@ from pathlib import Path
 import os
 
 from datetime import timedelta
- 
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,20 +43,19 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'base',
     'job',
+    'contact',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
     "corsheaders",
 ]
 
 REST_FRAMEWORK = {
- 
+
     'DEFAULT_AUTHENTICATION_CLASSES': (
- 
+
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ), 'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAdminUser'
-   ),
- 
+    ), 'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser', ),
+
 }
 
 
@@ -68,7 +67,7 @@ SIMPLE_JWT = {
     "UPDATE_LAST_LOGIN": False,
 
     "ALGORITHM": "HS256",
- 
+
     "VERIFYING_KEY": "",
     "AUDIENCE": None,
     "ISSUER": None,
@@ -109,11 +108,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
-    
-    
+
+
+
     "corsheaders.middleware.CorsMiddleware",
-     
+
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -193,4 +192,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOW_ALL_ORIGINS=True
+CORS_ALLOW_ALL_ORIGINS = True
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'abdallah.shafiq49@gmail.com'
+EMAIL_HOST_PASSWORD = 'ovycfwomdvqctzll'
+EMAIL_USE_TLS = True
+EMAIL_PORT = '587'
